@@ -50,7 +50,12 @@ deactivate() {{
     def run_zsh_test(self, commands, cwd=None):
         """Run a series of zsh commands and return the result"""
         # Build command string that sources plugin and runs commands
+        # Reset environment state to ensure clean testing
         cmd_string = f"""
+        # Reset environment state for clean testing
+        unset VIRTUAL_ENV
+        AUTOENV_ACTIVATED=0
+        # Source the plugin
         source '{self.plugin_path}'
         {commands}
         """
@@ -59,7 +64,8 @@ deactivate() {{
             ['zsh', '-c', cmd_string],
             capture_output=True,
             text=True,
-            cwd=cwd
+            cwd=cwd,
+            env={**os.environ, 'VIRTUAL_ENV': ''}  # Ensure VIRTUAL_ENV is not set
         )
         
         return result
@@ -118,8 +124,9 @@ deactivate() {{
             self.create_mock_venv(venv_path)
             
             # Create a directory without .venv to navigate to
-            other_dir = temp_path.parent / f"other_dir_{id(temp_path)}" 
-            other_dir.mkdir()
+            import time
+            other_dir = temp_path.parent / f"other_dir_{int(time.time() * 1000000)}" 
+            other_dir.mkdir(exist_ok=True)
             
             result = self.run_zsh_test(f"""
             cd '{temp_path}'
@@ -189,8 +196,10 @@ deactivate() {{
             venv_path = temp_path / ".venv"
             self.create_mock_venv(venv_path)
             
-            other_dir = temp_path.parent / f"other_dir_{id(temp_path)}"
-            other_dir.mkdir()
+            # Create a unique directory name using timestamp to avoid collisions
+            import time
+            other_dir = temp_path.parent / f"other_dir_{int(time.time() * 1000000)}"
+            other_dir.mkdir(exist_ok=True)
             
             result = self.run_zsh_test(f"""
             # Define test hooks

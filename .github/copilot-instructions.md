@@ -21,6 +21,7 @@ zsh-uv-env is a minimal zsh plugin that automatically activates and deactivates 
 ### Prerequisites
 - Zsh shell installed
 - Python 3 (for creating test virtual environments)
+- uv (for running automated tests)
 
 ### Syntax Validation
 **Always run syntax validation before making changes:**
@@ -29,8 +30,19 @@ bash -n zsh-uv-env.plugin.zsh
 ```
 This command should exit with status 0 (no output) if syntax is correct.
 
-### Testing the Plugin
-Since there are no automated tests, validation requires manual testing:
+### Automated Testing
+**The repository now includes a comprehensive test suite. Always run tests when adding features or modifying the plugin:**
+```bash
+uv run tests/run_tests.py
+```
+
+The test suite includes:
+- **Unit tests** (`tests/test_plugin.py`): Test individual functions in isolation
+- **Integration tests** (`tests/test_integration.py`): Test end-to-end plugin behavior
+- **Test runner** (`tests/run_tests.py`): Unified test execution and reporting
+
+### Manual Testing (Alternative)
+For manual validation without the test suite:
 
 1. **Create test environment:**
    ```bash
@@ -51,6 +63,7 @@ Since there are no automated tests, validation requires manual testing:
 
 ### Validation Steps
 - **Syntax check**: Run `bash -n zsh-uv-env.plugin.zsh` (takes <1 second)
+- **Automated tests**: Run `uv run tests/run_tests.py` (takes ~10-15 seconds)
 - **Manual testing**: Create .venv directory and test navigation (takes 2-3 minutes)
 - **Hook testing**: If modifying hook functionality, test with sample post-hooks
 
@@ -65,9 +78,15 @@ Since there are no automated tests, validation requires manual testing:
 ```
 zsh-uv-env/
 ├── .git/                          # Git repository
+├── .github/
+│   └── copilot-instructions.md    # Copilot development instructions
 ├── LICENSE                        # MIT license (21 lines)
 ├── README.md                      # Installation and usage docs (64 lines)
-└── zsh-uv-env.plugin.zsh         # Main plugin file (103 lines)
+├── tests/                         # Automated test suite
+│   ├── run_tests.py              # Main test runner
+│   ├── test_plugin.py            # Unit tests for plugin functions
+│   └── test_integration.py       # Integration tests for full behavior
+└── zsh-uv-env.plugin.zsh         # Main plugin file (140 lines)
 ```
 
 ### Main Plugin Architecture (`zsh-uv-env.plugin.zsh`)
@@ -109,18 +128,22 @@ zsh-uv-env/
 - **No package.json, requirements.txt, or other dependency files**
 
 ### Validation Pipeline
-- No GitHub Actions or CI/CD configured
-- No automated testing framework
-- Validation relies on manual testing in zsh environment
-- Consider adding basic shell syntax validation if implementing CI
+- **Automated Testing**: Comprehensive test suite using Python and zsh subprocess calls
+- **Test Runner**: Use `uv run tests/run_tests.py` to execute all tests
+- **Unit Tests**: Individual function testing in isolation
+- **Integration Tests**: End-to-end behavior testing with mock virtual environments
+- No GitHub Actions or CI/CD configured (tests run locally)
+- Basic shell syntax validation included in workflow
 
 ### Making Changes
 When modifying this plugin:
 1. **Always** validate syntax first: `bash -n zsh-uv-env.plugin.zsh`
-2. Test in actual zsh environment with real .venv directories
-3. Consider impact on hook system if modifying activation/deactivation logic
-4. Test edge cases: nested .venv directories, manual venv activation, home directory behavior
-5. Verify the `AUTOENV_ACTIVATED` flag correctly tracks state changes
+2. **Always** run the automated test suite: `uv run tests/run_tests.py`
+3. Test in actual zsh environment with real .venv directories for additional verification
+4. Consider impact on hook system if modifying activation/deactivation logic
+5. Test edge cases: nested .venv directories, manual venv activation, home directory behavior
+6. Verify the `AUTOENV_ACTIVATED` flag correctly tracks state changes
+7. Add tests for new functionality when adding features
 
 ### README Contents Summary
 The README provides:
