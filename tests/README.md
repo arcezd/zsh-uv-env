@@ -33,7 +33,7 @@ uv run tests/test_integration.py
 ### Prerequisites
 
 - Ensure `uv` is installed and available in your PATH
-- **Python 3.6+** (for test runner)
+- **Python 3.13+** (for test runner)
 - **zsh shell** (the plugin being tested)
 - **Unix-like environment** (Linux, macOS, WSL)
 
