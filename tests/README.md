@@ -15,24 +15,25 @@ This directory contains a comprehensive test suite for the zsh-uv-env plugin.
 Run all tests with a single command:
 
 ```bash
-python3 tests/run_tests.py
+uv run tests/run_tests.py
 ```
 
 ### Running Individual Test Suites
 
 Run only unit tests:
 ```bash
-python3 tests/test_plugin.py
+uv run tests/test_plugin.py
 ```
 
 Run only integration tests:
 ```bash
-python3 tests/test_integration.py
+uv run tests/test_integration.py
 ```
 
 ### Prerequisites
 
-- **Python 3.6+** (for test runner)
+- Ensure `uv` is installed and available in your PATH
+- **Python 3.13+** (for test runner)
 - **zsh shell** (the plugin being tested)
 - **Unix-like environment** (Linux, macOS, WSL)
 
