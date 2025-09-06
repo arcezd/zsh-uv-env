@@ -62,8 +62,8 @@ class PluginTester:
         """Test is_venv_active function"""
         print("\n=== Testing is_venv_active function ===")
         
-        # Test when no VIRTUAL_ENV is set
-        result = self.run_zsh_function("is_venv_active")
+        # Test when no VIRTUAL_ENV is set (unset any existing VIRTUAL_ENV)
+        result = self.run_zsh_function("unset VIRTUAL_ENV; is_venv_active")
         self.assert_exit_code(1, result, "is_venv_active returns 1 when no VIRTUAL_ENV set")
         
         # Test when VIRTUAL_ENV is set
