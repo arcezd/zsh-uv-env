@@ -1,3 +1,7 @@
+# /// script
+# requires-python = ">=3.13"
+# dependencies = []
+# ///
 #!/usr/bin/env python3
 """
 Test runner for zsh-uv-env plugin tests
